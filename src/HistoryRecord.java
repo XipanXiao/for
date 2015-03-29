@@ -10,7 +10,8 @@ public class HistoryRecord {
 	double bid;
 	double ask;
 
-	HistoryRecord(long tid, boolean dealable, Date time, double bid, double ask) {
+	HistoryRecord(long tid, boolean dealable, Date time, double bid,
+			double ask) {
 		this.tid = tid;
 		this.dealable = dealable;
 		this.time = time;
@@ -24,15 +25,23 @@ public class HistoryRecord {
 		boolean dealable = fields[1].equals("D");
 		
 		Date time;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        SimpleDateFormat simpleDateFormat = 
+        		new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
         try {
 			time = simpleDateFormat.parse(fields[3]);
 		} catch (ParseException e) {
 			return null;
 		}
+
         double bid = Double.valueOf(fields[4]);
         double ask = Double.valueOf(fields[5]);
         
         return new HistoryRecord(tid, dealable, time, bid, ask);
+	}
+	
+	static String getCurrencySymbol(String record) {
+		String[] fields = record.split(",");
+		return fields[2];
 	}
 }
