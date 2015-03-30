@@ -9,8 +9,11 @@ import org.junit.Test;
 
 public class HistoryRecordsTest {
 
+	HistoryRecords records;
 	@Before
 	public void setUp() throws Exception {
+		records = new HistoryRecords();
+		records.addFile("EUR_USD_Week5.csv");
 	}
 
 	@After
@@ -18,11 +21,17 @@ public class HistoryRecordsTest {
 	}
 
 	@Test
-	public void testFromFile() throws IOException {
-		HistoryRecords records = HistoryRecords.fromFile("EUR_USD_Week5.csv");
-		assertNotNull(records);
+	public void testAddFile() throws IOException {
 		assertEquals(records.currencyPairSymbol, "EUR/USD");
 		assertFalse(records.records.isEmpty());
 	}
 
+	public void testGetNextRate() {
+		assertTrue(records.hasNextRate());
+		
+		while(records.hasNextRate()) {
+			RateRecord rate = records.getNextRate();
+			assertNotNull(rate);
+		}
+	}
 }

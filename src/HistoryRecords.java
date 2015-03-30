@@ -5,18 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class HistoryRecords {
-	List<HistoryRecord> records;
+public class HistoryRecords implements RatedataFeeder {
+	int currentIndex = 0;
+	List<RateRecord> records;
 	String currencyPairSymbol;
 	
-	HistoryRecords(List<HistoryRecord> records, String symbol) {
+	HistoryRecords() {
+	}
+	
+	HistoryRecords(List<RateRecord> records, String symbol) {
 		this.records = records;
 		this.currencyPairSymbol = symbol;
 	}
 	
-	static HistoryRecords fromFile(String filename) throws IOException {
-		String symbol = null;
-		List<HistoryRecord> records = new ArrayList<HistoryRecord>();
+	void addFile(String filename) throws IOException {
+		if (records == null) {
+			records = new ArrayList<RateRecord>();
+		}
+		
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 
 		boolean firstLine = true;
@@ -26,15 +32,28 @@ public class HistoryRecords {
 				continue;
 			}
 			
-			if (symbol == null) {
-				symbol = HistoryRecord.getCurrencySymbol(line);
+			if (currencyPairSymbol == null) {
+				currencyPairSymbol = RateRecord.getCurrencySymbol(line);
 			}
 
-			HistoryRecord record = HistoryRecord.fromString(line);
+			RateRecord record = RateRecord.fromString(line);
 			records.add(record);
 		}
 		
 		reader.close();
-		return new HistoryRecords(records, symbol);
+	}
+
+	@Override
+	public RateRecord getNextRate() {
+		if (records == null || records.isEmpty()) {
+			return null;
+		}
+		
+		return records.get(currentIndex++);
+	}
+
+	@Override
+	public boolean hasNextRate() {
+		return currentIndex < records.size();
 	}
 }

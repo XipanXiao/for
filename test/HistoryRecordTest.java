@@ -18,6 +18,6 @@ public class HistoryRecordTest {
 	@Test
 	public void testFromString() {
 		String data = "3705101498,D,EUR/USD,2014-12-28 17:00:06.370000000,1.217840,1.218340";
-		assertNotNull(HistoryRecord.fromString(data));
+		assertNotNull(RateRecord.fromString(data));
 	}
 }

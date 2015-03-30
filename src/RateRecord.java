@@ -3,14 +3,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class HistoryRecord {
+public class RateRecord {
+	String symbol;
 	long tid;
 	boolean dealable;
 	Date time;
 	double bid;
 	double ask;
 
-	HistoryRecord(long tid, boolean dealable, Date time, double bid,
+	RateRecord(long tid, boolean dealable, Date time, double bid,
 			double ask) {
 		this.tid = tid;
 		this.dealable = dealable;
@@ -19,7 +20,7 @@ public class HistoryRecord {
 		this.ask = ask;
 	}
 	
-	static HistoryRecord fromString(String record) {
+	static RateRecord fromString(String record) {
 		String[] fields = record.split(",");
 		long tid = Long.valueOf(fields[0]);
 		boolean dealable = fields[1].equals("D");
@@ -37,7 +38,7 @@ public class HistoryRecord {
         double bid = Double.valueOf(fields[4]);
         double ask = Double.valueOf(fields[5]);
         
-        return new HistoryRecord(tid, dealable, time, bid, ask);
+        return new RateRecord(tid, dealable, time, bid, ask);
 	}
 	
 	static String getCurrencySymbol(String record) {
